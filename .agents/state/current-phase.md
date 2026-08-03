@@ -8,7 +8,9 @@ updated: 2026-08-02
 
 **Phase 1 — Market Validation**: complete. Competitor matrix, market-gap report, personas, JTBD, problem ranking, pricing hypotheses, and MVP positioning all written and cross-referenced (see `docs/research/research-plan.md` status table). Not independently validated with real users/surveys — pricing hypotheses in particular are explicitly unvalidated.
 
-**Phase 2 — Product Requirements**: starting. PRD sections 1-4 to be populated from Phase 1 outputs.
+**Phase 2 — Product Requirements**: in progress. PRD §1-4 and §13 populated from Phase 1 outputs (`docs/product/prd.md` v0.2). §5-12 deliberately left as outline pending Phase 3 prototype input (locking functional/non-functional requirements before knowing what's technically achievable risks specifying something infeasible).
+
+**Phase 3 — Technical Feasibility Prototypes**: starting. See `backlog/prototype-backlog.md` for the recommended first three.
 
 ## Phase 0 exit criteria
 
