@@ -26,7 +26,11 @@ A `ToleranceFactor` (default 1.25×) additionally absorbs measurement noise, so 
 
 **2. Totals matter independently of per-widget status.** Ten widgets each comfortably inside their own budget can still add up to an unacceptable total. `GetTotals()` exists so the host can act on the aggregate even when no individual widget is at fault — pinned by a test that has ten compliant widgets summing to 9% CPU and 300 MB.
 
-## Deliberately not enforcement
+## Deliberately not enforcement (here)
+
+Hard limits are an OS concern: [ADR-0004](adr/0004-process-and-isolation-model.md) puts each package in a job object with memory and CPU caps derived from its declared budget. The ledger observes and reports; the job object makes the ceiling real. Neither is built yet.
+
+## Measurement and policy stay separate
 
 The ledger performs no I/O, reads no clock, and takes no action. Callers supply samples with timestamps and decide what to do with a verdict — throttle, pause, warn the user, or surface it in a marketplace listing. Keeping measurement separate from policy makes hour-long scenarios deterministic to test, and leaves the host free to choose different responses in different modes (on battery, during fullscreen, in safe mode).
 

@@ -24,7 +24,10 @@ Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now 
 
 **Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD.
 
-**Phase 4 — Architecture Lock**: in progress. Eight deliverables complete, each designed *and implemented as real, tested code* (229 tests passing overall):
+**Phase 4 — Architecture Lock**: in progress. Nine deliverables complete (229 tests passing overall). One is design-only:
+- **Process/isolation model** ([ADR-0004](../../docs/architecture/adr/0004-process-and-isolation-model.md)) + [`system-context.md`](../../docs/architecture/system-context.md) orientation doc. Design only — **nothing validated**, which promotes Prototype 13 (plugin process isolation) to a **Phase 5 blocker**.
+
+The rest are implemented as real, tested code:
 - **Package format + signing** (`docs/architecture/package-format.md` → `src/DesktopRuntime.Core/Packaging/`): the marketplace trust boundary. Zip-slip/reserved-name/ADS/bomb defences, content-type allowlist, signing policy with cryptography deliberately abstracted rather than hand-rolled.
 - **Resource accounting** (`docs/architecture/resource-accounting.md` → `src/DesktopRuntime.Core/Resources/`): makes declared widget budgets checkable; sustained-breach detection plus aggregate totals. Addresses the #2 market gap.
 - **Shell recovery model** (`docs/architecture/recovery-model.md` → `src/DesktopRuntime.Core/Recovery/`): detect→wait→relaunch→backoff→safe-mode policy; the attempt counter resets only on *sustained* health, so a flapping shell still trips the breaker. Directly addresses the #1 market gap.
@@ -34,7 +37,7 @@ Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now 
 - **Workspace schema** (`docs/architecture/workspace-schema.md` → `src/DesktopRuntime.Core/Workspaces/`): model, versioned serializer with migration seam, and a monitor resolver that defers rather than discards layouts for disconnected monitors.
 - **Permission model** (`docs/architecture/permission-model.md` → `src/DesktopRuntime.Core/Permissions/`): closed capability catalog with no arbitrary-execution capability by construction, default-deny evaluation, exact-host network scoping with abuse-case tests.
 
-Remaining Phase 4 deliverables: IPC contracts, database design, rendering pipeline, system context/process diagrams.
+Remaining Phase 4 deliverables: IPC message contracts (shape sketched in ADR-0004, not specified), database design, rendering pipeline.
 
 ## Phase 0 exit criteria
 

@@ -43,6 +43,12 @@ These are each covered by tests in `tests/DesktopRuntime.Core.Tests/Permissions/
 5. **Network grants are exact-host only.** A grant for `example.com` does **not** cover `sub.example.com` (no subdomain implication), `example.com.evil.com` (suffix attack), or `notexample.com` (prefix attack). Wildcards, schemes, paths and user-info are rejected in a declaration, because each invites parser-confusion tricks where the declared host is not the host actually contacted. Hosts are normalized to lowercase once at parse time and compared ordinally thereafter, since DNS is case-insensitive but string comparison should not be culture-sensitive.
 6. **`process.launch` names an application, not a command.** Scopes containing whitespace, quotes, path separators, or shell metacharacters (`& | ; < > % $ \``) are rejected.
 
-## What this model does not yet cover
+## Where enforcement physically happens
 
-Package signing and creator identity, the review/scanning pipeline, runtime enforcement plumbing (AppContainer, restricted tokens, job objects), the user-facing consent prompt, and revocation are all still to be designed — see `backlog/prototype-backlog.md` item 13 (plugin process isolation) and Phase 8. This document defines *what may be requested and how a request is evaluated*; it does not by itself sandbox a running package.
+This document defines *what may be requested and how a request is evaluated*; it does not by itself sandbox a running package. That is [ADR-0004](adr/0004-process-and-isolation-model.md), which places package code in a sandboxed per-package process and — the essential rule — performs every permission check in the **core service**, on the trusted side of the IPC boundary. A sandboxed process never decides what it is allowed to do.
+
+ADR-0004 is designed but **not built or validated**: Phase 3 Prototype 13 (plugin process isolation) has not been run.
+
+## What this model still does not cover
+
+Creator identity issuance and revocation, the marketplace review/scanning pipeline, and the user-facing consent prompt. Package signing policy is now covered by [`package-format.md`](package-format.md).
