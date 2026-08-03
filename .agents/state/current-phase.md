@@ -10,7 +10,7 @@ updated: 2026-08-02
 
 **Phase 2 — Product Requirements**: in progress. PRD §1-4 and §13 populated from Phase 1 outputs (`docs/product/prd.md` v0.2). §5-12 deliberately left as outline pending Phase 3 prototype input (locking functional/non-functional requirements before knowing what's technically achievable risks specifying something infeasible).
 
-**Phase 3 — Technical Feasibility Prototypes**: starting. See `backlog/prototype-backlog.md` for the recommended first three.
+**Phase 3 — Technical Feasibility Prototypes**: in progress. Prototype 1 (desktop attachment) and Prototype 2 (overlay fallback) both built and run against the live desktop this session — **neither achieved reliable behind-icons rendering on this build (10.0.26200.0) as implemented.** See `prototypes/desktop-attachment-poc/REPORT.md` and `prototypes/desktop-overlay-fallback-poc/REPORT.md`. This is a real architectural finding, not just documentation: the wallpaper/desktop-host module now needs a three-tier fallback chain (WorkerW attach → Progman-handle z-order overlay, untested → `SystemParametersInfo` static fallback, not yet built) instead of the originally-assumed two-tier plan. Next: Prototype 3 (Explorer restart recovery), and/or the two follow-up spikes flagged in the Prototype 2 report.
 
 ## Phase 0 exit criteria
 

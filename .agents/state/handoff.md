@@ -4,38 +4,33 @@ updated: 2026-08-02
 
 # Handoff
 
-## What was just done (this session)
+## What was just done (this session, continued after Phase 0 report)
 
-Phase 0 scaffold, using `github.com/hbkdad/desktop-costum` (cloned empty) as the repository:
+User granted standing authorization to commit and push, and asked to proceed autonomously, prompting only when truly blocked. Since then, pushed 5 commits to `main` on `github.com/hbkdad/desktop-costum`:
 
-- `CLAUDE.md`, `AGENTS.md`, `README.md`, `.gitignore`, `CONTRIBUTING.md`.
-- `.agents/state/{current-phase,decisions,handoff}.md`.
-- `.agents/prompts/` — 7 role prompts (product-research, windows-architecture, security, ux, performance, commercial, documentation agents).
-- `.claude/skills/` — 15 task-specific skills (windows-api-research, competitor-research, product-requirements, architecture-decision, desktop-host-prototype, winui-component, workspace-schema, widget-builder, wallpaper-runtime, automation-rule, security-review, performance-test, release-build, installer-validation, launch-marketing).
-- `docs/product/{current-state,prd}.md`, `docs/research/{research-plan,competitor-matrix}.md`, `docs/architecture/adr/000{1,2}-*.md`.
-- `backlog/{task-backlog,definition-of-done,risk-register,dependency-register,prototype-backlog}.md`.
-- `.github/workflows/ci.yml` (Windows runner, .NET 10, build + test + upload trx results).
-- Minimal buildable/testable skeleton: `DesktopRuntime.slnx` with `src/DesktopRuntime.Core` (net10.0 class library) + `tests/DesktopRuntime.Core.Tests` (xUnit) — verified locally: build succeeded (0 warnings/errors), 1/1 tests passed.
-- Phase 1 competitor research completed and written to `docs/research/competitor-matrix.md`: 8 products (Fences, Rainmeter, Wallpaper Engine, Lively Wallpaper, DeskScapes, DisplayFusion, Start11, Groupy), sourced, with cross-cutting patterns and candidate underserved segments.
+1. Phase 0 scaffold (repo structure, `CLAUDE.md`/`AGENTS.md`, 15 skills, 7 agent prompts, state files, backlog, CI, minimal buildable `.NET` skeleton, sourced 8-product competitor matrix).
+2. Phase 1 close-out: `market-gap-report.md`, `personas.md` (5 personas, 3 MVP-primary), `jobs-to-be-done.md`, `problem-ranking.md`, `pricing-hypotheses.md`, `mvp-positioning.md` — all synthesized from the already-sourced competitor matrix.
+3. PRD v0.2: populated §1-4 and §13 (vision, non-goals, target users, core workflows, MVP acceptance criteria); §5-12 deliberately left outline-only pending Phase 3 input.
+4. **Phase 3 Prototype 1** (desktop attachment / WorkerW): built, ran against the live desktop. **Result: unreliable on this build** — corroborates the Windows 11 24H2 breakage pattern already found in competitor research.
+5. **Phase 3 Prototype 2** (overlay fallback): built, ran against the live desktop. **Result: also insufficient as implemented** — a plain `HWND_BOTTOM` window gets close to but not behind Progman in Z-order.
 
-Nothing was committed or pushed — that requires the owner's go-ahead (see Open questions).
+**This is the most important thing to know:** neither of the two originally-assumed rendering strategies works yet, on real empirical testing, not just research. The desktop-host module now needs a three-tier fallback plan instead of two. See `.agents/state/decisions.md` (top entry) and both `prototypes/*/REPORT.md` files.
 
-## Open questions / blocked on owner
+## Open questions / blocked on owner (unchanged from before, still not blocking technical work)
 
-1. **Commit and push?** Working tree has ~13 new top-level entries, all untracked, no commits yet. Say the word and this gets committed and pushed to `hbkdad/desktop-costum`.
-2. **Repo visibility and branch protection on `main`** — not set by this session.
-3. **Codex-compatible skill mirror** — the user asked that "both systems should share equivalent skill concepts" between Claude Code and Codex. Skills were authored only under `.claude/skills/` (the format this session is confident about). Codex's actual skill-discovery directory convention was not confirmed, so nothing was fabricated there — needs the owner (or a session with current Codex docs) to confirm the real path before mirroring/pointing to it.
-4. **Product name** — still unresolved; do not pick one without the owner.
-5. **Reddit-corroboration gap** in the competitor matrix (Stardock product line, DisplayFusion) — flagged in the file itself, not hidden.
+1. Repo visibility and branch protection on `main` — not set.
+2. Codex-compatible skill mirror path — not fabricated, still unconfirmed.
+3. Product name — still unresolved.
+4. Reddit-corroboration gap in the competitor matrix — flagged, not fixed.
 
 ## Recommended next task
 
-Either:
-- (a) Phase 1 close-out: write `docs/research/market-gap-report.md`, `docs/product/{personas,jobs-to-be-done,problem-ranking,pricing-hypotheses,mvp-positioning}.md` from the already-sourced competitor matrix (method already laid out in `docs/research/research-plan.md`), or
-- (b) Jump to Phase 3, Prototype 1 (desktop attachment) using the `desktop-host-prototype` skill, if the owner wants a technical-feasibility signal before finishing market docs.
+Two follow-up spikes flagged in `prototypes/desktop-overlay-fallback-poc/REPORT.md`, neither built yet:
+1. Retry the overlay using `SetWindowPos(hwnd, progmanHandle, ...)` (real handle, not the `HWND_BOTTOM` pseudo-value) as tier 2 of the fallback chain.
+2. Build the `SystemParametersInfo(SPI_SETDESKWALLPAPER)` static-image path as the guaranteed-available tier 3.
 
-Default recommendation: (a) first — it's cheap (synthesis of research already done) and unblocks the PRD, whereas prototypes are expensive and should be pointed at the right target segment.
+After that: Phase 3 Prototype 3 (Explorer restart recovery), then decide whether to keep going through the remaining 10 prototypes or pause for an ADR locking in the (now three-tier) desktop-hosting architecture given what's been learned.
 
 ## Exact prompt to continue
 
-> Read `.agents/state/current-phase.md` and this handoff. Complete Phase 1 close-out: write `docs/research/market-gap-report.md` and the persona/JTBD/problem-ranking/pricing-hypotheses/mvp-positioning docs listed in `docs/research/research-plan.md`, grounded in `docs/research/competitor-matrix.md`. Update `research-plan.md`'s status table and `.agents/state/{current-phase,decisions,handoff}.md` when done.
+> Read `.agents/state/current-phase.md` and this handoff. Build the two follow-up spikes flagged in `prototypes/desktop-overlay-fallback-poc/REPORT.md` (Progman-handle `SetWindowPos` variant; `SystemParametersInfo` static fallback tier), test both against the live desktop, then write Phase 3 Prototype 3 (Explorer restart recovery). Update `backlog/prototype-backlog.md`, `backlog/risk-register.md`, and `.agents/state/{current-phase,decisions,handoff}.md` after each. Commit and push after each prototype, per standing authorization.
