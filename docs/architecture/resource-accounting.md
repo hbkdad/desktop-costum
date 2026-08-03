@@ -36,4 +36,6 @@ The ledger performs no I/O, reads no clock, and takes no action. Callers supply 
 
 ## Not yet specified
 
-Where samples come from (per-process counters, job objects), GPU accounting, enforcement policy, how breaches are surfaced to the user or to a marketplace listing, and whether persistent offenders are blocked from installation. Sampling cost itself must stay negligible — Prototype 10 measured the comparable fullscreen check at ~0.7 ms, which is the right order of magnitude to aim for.
+GPU accounting, enforcement policy, how breaches are surfaced to the user or to a marketplace listing, and whether persistent offenders are blocked from installation.
+
+The **sample source is settled**: Prototype 13 (`prototypes/process-isolation-poc/REPORT.md`) confirmed per-job accounting is readable from the trusted side at ~0.17 ms per query — cheap enough to poll, and crucially read *about* the sandboxed process rather than self-reported *by* it.

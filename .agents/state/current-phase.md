@@ -10,7 +10,9 @@ updated: 2026-08-02
 
 **Phase 2 — Product Requirements**: in progress. PRD §1-4 and §13 populated from Phase 1 outputs (`docs/product/prd.md` v0.2). §5-12 deliberately left as outline pending Phase 3 prototype input (locking functional/non-functional requirements before knowing what's technically achievable risks specifying something infeasible).
 
-**Phase 3 — Technical Feasibility Prototypes**: in progress, **all three recommended-first prototypes complete** (2026-08-02), all run against the live desktop, not just documented:
+**Phase 3 — Technical Feasibility Prototypes**: 7 of 13 complete, all run against real hardware. Most recent: **Prototype 13 (process isolation)** — see `prototypes/process-isolation-poc/REPORT.md`.
+
+All three recommended-first prototypes complete (2026-08-02):
 - Prototype 1 (desktop attachment): unreliable on this build → opportunistic only.
 - Prototype 2 (overlay fallback) + Spikes A/B: z-order overlay structurally impossible behind Progman → discarded for wallpaper, repurposed for widgets; static `SystemParametersInfo` fallback proven reliable.
 - Prototype 3 (Explorer restart recovery): Progman handle confirmed to go stale on restart (~2.7s manual recovery time); found Windows 11 has its own auto-recovery that can race with a manual relaunch — recovery adapter should detect-then-wait-then-relaunch, not kill-then-immediately-relaunch.
@@ -25,7 +27,7 @@ Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now 
 **Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD.
 
 **Phase 4 — Architecture Lock**: in progress. Nine deliverables complete (229 tests passing overall). One is design-only:
-- **Process/isolation model** ([ADR-0004](../../docs/architecture/adr/0004-process-and-isolation-model.md)) + [`system-context.md`](../../docs/architecture/system-context.md) orientation doc. Design only — **nothing validated**, which promotes Prototype 13 (plugin process isolation) to a **Phase 5 blocker**.
+- **Process/isolation model** ([ADR-0004](../../docs/architecture/adr/0004-process-and-isolation-model.md), now *Accepted in part*) + [`system-context.md`](../../docs/architecture/system-context.md) orientation doc. Its enforcement half was then **validated by Prototype 13** (job memory caps genuinely enforced; per-job accounting readable at ~0.17 ms). Remaining Phase 5 blocker is narrowed to "run a real renderer inside an AppContainer with a restricted token".
 
 The rest are implemented as real, tested code:
 - **Package format + signing** (`docs/architecture/package-format.md` → `src/DesktopRuntime.Core/Packaging/`): the marketplace trust boundary. Zip-slip/reserved-name/ADS/bomb defences, content-type allowlist, signing policy with cryptography deliberately abstracted rather than hand-rolled.

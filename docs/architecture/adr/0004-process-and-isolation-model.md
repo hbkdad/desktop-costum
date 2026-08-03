@@ -2,7 +2,13 @@
 
 ## Status
 
-Proposed. The isolation mechanisms below are **not yet validated** — Phase 3 Prototype 13 (plugin process isolation) has not been built. Do not treat the AppContainer/job-object details as settled until it has.
+**Accepted in part.** Phase 3 Prototype 13 (`prototypes/process-isolation-poc/REPORT.md`) has since validated the enforcement half on real hardware, unelevated:
+
+- Job object memory caps are genuinely **enforced** — a 512 MB allocation was refused under a 146 MB cap.
+- Per-job accounting is readable from the trusted side and costs **~0.17 ms** per query, making it a viable sample source for `ResourceLedger`.
+- An AppContainer profile can be created without elevation.
+
+**Still unverified — do not treat as settled:** launching a process *into* an AppContainer (creating the profile is the easy half), restricted tokens, and CPU capping (only memory was tested; CPU rate control has different semantics and can terminate rather than throttle, which would be wrong for a widget).
 
 ## Context
 
@@ -54,4 +60,4 @@ Named pipes with an explicit message contract per direction, and per-connection 
 - **A widget cannot exceed its declared budget**, rather than merely being reported for it — but only once job-object limits are wired up, which is not done.
 - **Process count grows with installed packages.** Idle cost must be measured against the benchmark profiles as package count rises; this is a real risk to the idle-cost budget and belongs in the performance work.
 - **IPC latency enters the widget update path.** Widgets are event-driven and low-frequency by design, so this should be acceptable — but it is an assumption, not a measurement.
-- **Prototype 13 is now a blocker for Phase 5**, not an optional extra: nothing above is verified. If AppContainer proves impractical for hosting our renderer, the fallback is a restricted-token process without an AppContainer, which is weaker and would need its own ADR.
+- **A narrowed blocker remains for Phase 5.** Prototype 13 confirmed the job-object enforcement this design leans on, so the open question is now specifically *"can a real renderer run inside an AppContainer with a restricted token?"* rather than the whole isolation model. If it cannot, the fallback is a restricted-token process without an AppContainer — weaker, and needing its own ADR.
