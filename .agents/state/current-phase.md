@@ -41,6 +41,10 @@ The rest are implemented as real, tested code:
 
 Remaining Phase 4 deliverables: IPC message contracts (shape sketched in ADR-0004, not specified), database design, rendering pipeline.
 
+**Phase 5 — MVP Implementation**: started, unblocked by the isolation validation above.
+- **Slice 1 (workspace foundation)**: `WorkspaceStore` implemented (`src/DesktopRuntime.Core/Workspaces/WorkspaceStore.cs`) — atomic save (temp file → flush-to-disk → atomic move), load, list, delete, import/export. Filenames derive from the workspace **id**, never its user-supplied name. One corrupted file cannot make other workspaces unreachable. Import assigns a new id so it can never silently overwrite. 21 tests.
+- Remaining in Slice 1: workspace *activation* (applying a workspace to the live desktop) — needs the desktop host, which does not exist yet.
+
 ## Phase 0 exit criteria
 
 - [x] Repository structure created
