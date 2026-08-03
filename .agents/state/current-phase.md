@@ -24,7 +24,11 @@ Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now 
 
 **Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD.
 
-**Phase 4 — Architecture Lock**: started. First deliverable complete: the **workspace schema** (`docs/architecture/workspace-schema.md`) is designed *and implemented as real, tested code* in `src/DesktopRuntime.Core/Workspaces/` — model, versioned serializer with migration seam, and a monitor resolver that defers rather than discards layouts for disconnected monitors. 14 tests passing. Remaining Phase 4 deliverables: widget schema, wallpaper schema, automation schema, package format, permission model, IPC contracts, database design, process/crash-recovery model, rendering pipeline, resource-accounting model.
+**Phase 4 — Architecture Lock**: in progress. Two deliverables complete, both designed *and implemented as real, tested code* (54 tests passing overall):
+- **Workspace schema** (`docs/architecture/workspace-schema.md` → `src/DesktopRuntime.Core/Workspaces/`): model, versioned serializer with migration seam, and a monitor resolver that defers rather than discards layouts for disconnected monitors.
+- **Permission model** (`docs/architecture/permission-model.md` → `src/DesktopRuntime.Core/Permissions/`): closed capability catalog with no arbitrary-execution capability by construction, default-deny evaluation, exact-host network scoping with abuse-case tests.
+
+Remaining Phase 4 deliverables: widget schema, wallpaper schema, automation schema, package format, IPC contracts, database design, process/crash-recovery model, rendering pipeline, resource-accounting model, system context/process diagrams.
 
 ## Phase 0 exit criteria
 
