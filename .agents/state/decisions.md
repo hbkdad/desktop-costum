@@ -2,6 +2,7 @@
 
 Compact log, newest first. Full rationale for architectural decisions belongs in `docs/architecture/adr/`, not here.
 
+- **2026-08-02** — MVP scope targets personas #1-3 (Multi-Monitor Power User, Battery-Conscious Laptop User, Desktop Organizer) and defers Aesthetic Tinkerer (creator tooling) and IT-Managed (fleet deployment) past MVP. *Why:* `docs/product/problem-ranking.md` ranks shell-update resilience and resource discipline above consolidation/creator-economy for MVP-stage risk/reward; see `docs/product/mvp-positioning.md`.
 - **2026-08-02** — Solution uses the SDK's new `.slnx` solution format (`DesktopRuntime.slnx`), not `.sln` — `dotnet new sln` on the installed .NET 10 SDK (10.0.204) generates `.slnx` by default. CI and docs reference `.slnx`. *Why:* matches what the installed toolchain actually produces; avoids a stale/wrong reference.
 - **2026-08-02** — Minimal `src/DesktopRuntime.Core` (net10.0 class library) + `tests/DesktopRuntime.Core.Tests` (xUnit) skeleton created and verified to build and test green, satisfying the Phase 0 requirement that the repo can build/test before feature work starts. *Why:* explicit Phase 0 gate; net10.0 chosen because it's what the installed SDK targets by default (current supported release per the non-negotiable principles).
 - **2026-08-02** — Product name unresolved; `Desktop Runtime` is an internal placeholder only. Forge-related names/branding/themes are permanently excluded. *Why:* explicit project constraint.

@@ -6,7 +6,9 @@ updated: 2026-08-02
 
 **Phase 0 — Repository and Operating System**: complete (this session). Pending owner action: review, commit, push, decide repo visibility.
 
-**Phase 1 — Market Validation**: in progress. Competitor matrix seeded with sourced research this session; market-gap report, personas, JTBD and pricing hypotheses not yet written.
+**Phase 1 — Market Validation**: complete. Competitor matrix, market-gap report, personas, JTBD, problem ranking, pricing hypotheses, and MVP positioning all written and cross-referenced (see `docs/research/research-plan.md` status table). Not independently validated with real users/surveys — pricing hypotheses in particular are explicitly unvalidated.
+
+**Phase 2 — Product Requirements**: starting. PRD sections 1-4 to be populated from Phase 1 outputs.
 
 ## Phase 0 exit criteria
 

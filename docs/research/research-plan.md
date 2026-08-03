@@ -17,13 +17,13 @@ Official site/pricing page; Microsoft Store or Steam reviews; GitHub issue track
 | Deliverable | Location | Status |
 |---|---|---|
 | Competitive matrix | `docs/research/competitor-matrix.md` | Done (2026-08-02) — 8 products, sourced |
-| Market-gap report | `docs/research/market-gap-report.md` | Not started |
-| Customer personas | `docs/product/personas.md` | Not started |
-| Jobs-to-be-done | `docs/product/jobs-to-be-done.md` | Not started |
-| Problem ranking | `docs/product/problem-ranking.md` | Not started |
-| Willingness-to-pay hypotheses | `docs/product/pricing-hypotheses.md` | Not started |
-| MVP positioning | `docs/product/mvp-positioning.md` | Not started |
-| Market risks | folded into `backlog/risk-register.md` | Seeded, needs Phase 1 review pass |
+| Market-gap report | `docs/research/market-gap-report.md` | Done (2026-08-02) — synthesized, no new sources needed |
+| Customer personas | `docs/product/personas.md` | Done (2026-08-02) — 5 personas, 3 primary for MVP |
+| Jobs-to-be-done | `docs/product/jobs-to-be-done.md` | Done (2026-08-02) — 6 core JTBD |
+| Problem ranking | `docs/product/problem-ranking.md` | Done (2026-08-02) — 4 gaps ranked |
+| Willingness-to-pay hypotheses | `docs/product/pricing-hypotheses.md` | Done (2026-08-02) — 5 hypotheses, unvalidated with real users |
+| MVP positioning | `docs/product/mvp-positioning.md` | Done (2026-08-02) |
+| Market risks | folded into `backlog/risk-register.md` | Seeded; reviewed against Phase 1 outputs, no new risks surfaced beyond what was already logged |
 
 ## Method for remaining deliverables
 
