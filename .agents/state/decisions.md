@@ -1,0 +1,11 @@
+# Decision Log
+
+Compact log, newest first. Full rationale for architectural decisions belongs in `docs/architecture/adr/`, not here.
+
+- **2026-08-02** — Solution uses the SDK's new `.slnx` solution format (`DesktopRuntime.slnx`), not `.sln` — `dotnet new sln` on the installed .NET 10 SDK (10.0.204) generates `.slnx` by default. CI and docs reference `.slnx`. *Why:* matches what the installed toolchain actually produces; avoids a stale/wrong reference.
+- **2026-08-02** — Minimal `src/DesktopRuntime.Core` (net10.0 class library) + `tests/DesktopRuntime.Core.Tests` (xUnit) skeleton created and verified to build and test green, satisfying the Phase 0 requirement that the repo can build/test before feature work starts. *Why:* explicit Phase 0 gate; net10.0 chosen because it's what the installed SDK targets by default (current supported release per the non-negotiable principles).
+- **2026-08-02** — Product name unresolved; `Desktop Runtime` is an internal placeholder only. Forge-related names/branding/themes are permanently excluded. *Why:* explicit project constraint.
+- **2026-08-02** — Provisional technology baseline (C#, current .NET, WinUI 3, Windows App SDK, SQLite, WebView2, Direct3D/Win2D, MSIX) accepted as a starting point, not locked. See [ADR-0002](../../docs/architecture/adr/0002-provisional-technology-baseline.md). *Why:* must be verified per Phase 3 prototypes before Phase 4 architecture lock.
+- **2026-08-02** — Electron is excluded unless a future ADR justifies it in writing against the provisional baseline. *Why:* explicit non-negotiable principle; memory/packaging/native-integration cost.
+- **2026-08-02** — No kernel drivers, DLL injection, or unrestricted global hooks in the initial product. *Why:* explicit non-negotiable principle; keeps the trust boundary at AppContainer/process-isolation level.
+- **2026-08-02** — Repository scaffolded at `github.com/hbkdad/desktop-costum`. Phase 0 files authored locally but not committed or pushed pending owner review. *Why:* commits/pushes require explicit user confirmation.
