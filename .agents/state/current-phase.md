@@ -24,14 +24,15 @@ Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now 
 
 **Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD.
 
-**Phase 4 — Architecture Lock**: in progress. Five deliverables complete, each designed *and implemented as real, tested code* (133 tests passing overall):
+**Phase 4 — Architecture Lock**: in progress. Six deliverables complete, each designed *and implemented as real, tested code* (143 tests passing overall):
+- **Shell recovery model** (`docs/architecture/recovery-model.md` → `src/DesktopRuntime.Core/Recovery/`): detect→wait→relaunch→backoff→safe-mode policy; the attempt counter resets only on *sustained* health, so a flapping shell still trips the breaker. Directly addresses the #1 market gap.
 - **Automation rule schema** (`docs/architecture/automation-schema.md` → `src/DesktopRuntime.Core/Automation/`): closed trigger/action catalogs, and — the key property — rules are validated **against the package's permission set**, so automation cannot bypass the permission model.
 - **Wallpaper tier selection** (`src/DesktopRuntime.Core/Wallpapers/`): makes ADR-0003 executable; video degrades to static *visibly*, never silently.
 - **Widget manifest schema** (`docs/architecture/widget-manifest.md` → `src/DesktopRuntime.Core/Widgets/`): validator producing a distinct validated type, allowlist-based id constraints, required resource budget, abuse-case tests.
 - **Workspace schema** (`docs/architecture/workspace-schema.md` → `src/DesktopRuntime.Core/Workspaces/`): model, versioned serializer with migration seam, and a monitor resolver that defers rather than discards layouts for disconnected monitors.
 - **Permission model** (`docs/architecture/permission-model.md` → `src/DesktopRuntime.Core/Permissions/`): closed capability catalog with no arbitrary-execution capability by construction, default-deny evaluation, exact-host network scoping with abuse-case tests.
 
-Remaining Phase 4 deliverables: package format (incl. signing), IPC contracts, database design, process/crash-recovery model, rendering pipeline, resource-accounting model, system context/process diagrams.
+Remaining Phase 4 deliverables: package format (incl. signing), IPC contracts, database design, rendering pipeline, resource-accounting model, system context/process diagrams.
 
 ## Phase 0 exit criteria
 
