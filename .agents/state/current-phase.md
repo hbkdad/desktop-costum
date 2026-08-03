@@ -22,7 +22,9 @@ Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now 
 - Prototype 10 (fullscreen detection): found and fixed a real false positive (maximized window read as fullscreen). Supported API authoritative over hand-rolled heuristic. ~0.7 ms/check.
 - Prototype 11 (adaptive rendering): power API plumbing verified; **on-battery path unverified** (no battery on test machine).
 
-**Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD. Next candidates: prototypes 12 (workspace restore) and 8 (drag-and-drop containers), both testable on current hardware.
+**Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD.
+
+**Phase 4 — Architecture Lock**: started. First deliverable complete: the **workspace schema** (`docs/architecture/workspace-schema.md`) is designed *and implemented as real, tested code* in `src/DesktopRuntime.Core/Workspaces/` — model, versioned serializer with migration seam, and a monitor resolver that defers rather than discards layouts for disconnected monitors. 14 tests passing. Remaining Phase 4 deliverables: widget schema, wallpaper schema, automation schema, package format, permission model, IPC contracts, database design, process/crash-recovery model, rendering pipeline, resource-accounting model.
 
 ## Phase 0 exit criteria
 
