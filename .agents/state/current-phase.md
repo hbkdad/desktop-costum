@@ -15,7 +15,14 @@ updated: 2026-08-02
 - Prototype 2 (overlay fallback) + Spikes A/B: z-order overlay structurally impossible behind Progman → discarded for wallpaper, repurposed for widgets; static `SystemParametersInfo` fallback proven reliable.
 - Prototype 3 (Explorer restart recovery): Progman handle confirmed to go stale on restart (~2.7s manual recovery time); found Windows 11 has its own auto-recovery that can race with a manual relaunch — recovery adapter should detect-then-wait-then-relaunch, not kill-then-immediately-relaunch.
 
-Desktop-hosting strategy finalized in [ADR-0003](../../docs/architecture/adr/0003-desktop-hosting-strategy.md). `docs/product/prd.md` §4/§13 updated. Next candidates: prototypes 9-11 (monitor/DPI persistence, fullscreen detection, adaptive rendering) per `backlog/prototype-backlog.md`.
+Desktop-hosting strategy finalized in [ADR-0003](../../docs/architecture/adr/0003-desktop-hosting-strategy.md). `docs/product/prd.md` §4/§13 updated.
+
+Prototypes 9, 10, 11 also complete (2026-08-02) — **6 of 13 backlog items now have run-against-real-hardware reports**:
+- Prototype 9 (monitor/DPI persistence): device interface path identified as the only viable persistence key; DPI-awareness-before-geometry-read established as a startup invariant. Reconnect stability **not empirically verified** (single monitor on test machine).
+- Prototype 10 (fullscreen detection): found and fixed a real false positive (maximized window read as fullscreen). Supported API authoritative over hand-rolled heuristic. ~0.7 ms/check.
+- Prototype 11 (adaptive rendering): power API plumbing verified; **on-battery path unverified** (no battery on test machine).
+
+**Two hardware validation gaps now tracked in `backlog/risk-register.md` as owner actions** (no second monitor, no battery) — both block MVP acceptance criteria that are already written into the PRD. Next candidates: prototypes 12 (workspace restore) and 8 (drag-and-drop containers), both testable on current hardware.
 
 ## Phase 0 exit criteria
 

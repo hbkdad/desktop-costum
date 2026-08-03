@@ -10,7 +10,13 @@ Each prototype must report: purpose, implementation, test method, measurements, 
 
 Rationale: these three de-risk the single biggest architectural unknown — whether reliable desktop/shell integration is achievable at all on supported terms — before investing in wallpapers, widgets, or automation built on top of it.
 
-**All three recommended-first prototypes are now complete (2026-08-02).** Next candidates: items 9 (monitor/DPI persistence) and 10/11 (fullscreen detection, adaptive rendering) — cheap, low-risk, and feed directly into the performance budgets already scoped in `backlog/dependency-register.md`.
+**All three recommended-first prototypes complete (2026-08-02), plus items 9, 10 and 11.** Six of thirteen backlog items now have run-against-real-hardware reports.
+
+**Two hardware-dependent validation gaps now block full confidence** (tracked in `backlog/risk-register.md`, neither is a code defect):
+- No second monitor available → multi-monitor and mixed-DPI persistence unverified (Prototype 9), though it is an MVP acceptance criterion (`docs/product/prd.md` §13.5).
+- No battery available → on-battery/battery-saver degradation unverified (Prototype 11), though the Battery-Conscious Laptop User is an MVP-primary persona.
+
+Next candidates: item 12 (workspace restore) and item 8 (drag-and-drop containers) — both testable on this hardware and both feed Phase 5 Slice 1/2 directly.
 
 ## Full backlog
 
@@ -22,8 +28,8 @@ Rationale: these three de-risk the single biggest architectural unknown — whet
 6. WebView wallpaper (WebView2-hosted web content as wallpaper). **Status: not started.**
 7. Widget rendering (host + at least one real widget end-to-end). **Status: not started.**
 8. Drag-and-drop desktop containers. **Status: not started.**
-9. Monitor and DPI configuration persistence (save/restore across reconnect/resolution change). **Status: not started — next candidate.**
-10. Fullscreen detection (for wallpaper/widget render pausing). **Status: not started — next candidate.**
-11. Adaptive rendering (frame-rate/quality scaling on battery or under load). **Status: not started — next candidate.**
+9. Monitor and DPI configuration persistence (save/restore across reconnect/resolution change). **Status: DONE (2026-08-02), with an unverified claim.** See `prototypes/monitor-dpi-persistence-poc/REPORT.md`. Established the device interface path (embeds hardware/EDID id) as the only viable persistence key — device name (`\\.\DISPLAYn`) and `HMONITOR` are positional/runtime and must never be persisted. Also established a startup invariant: set per-monitor DPI awareness *before* reading any geometry, or Windows reports virtualized coordinates and wrong values get persisted. **Reconnect stability itself is NOT empirically verified** — this machine has one monitor at 100% scale.
+10. Fullscreen detection (for wallpaper/widget render pausing). **Status: DONE (2026-08-02).** See `prototypes/adaptive-rendering-signals-poc/REPORT.md`. Found and fixed a real false positive: a *maximized* window was detected as fullscreen, which would have paused rendering during ordinary desktop use. The supported `SHQueryUserNotificationState` API got it right where the hand-rolled rect heuristic got it wrong. Cost ~0.7 ms/check steady state. True-fullscreen positive case not yet observed (no game/presentation running during test).
+11. Adaptive rendering (frame-rate/quality scaling on battery or under load). **Status: PARTIAL (2026-08-02).** Same report. `GetSystemPowerStatus` plumbing verified, degrade trigger defined (`ACLineStatus == 0 || SystemStatusFlag == 1`), but **this machine has no battery** so the on-battery/battery-saver path could not be exercised. Must be validated on laptop hardware — the Battery-Conscious Laptop User is an MVP-primary persona.
 12. Workspace restore (save → load → activate a full workspace). **Status: not started.**
 13. Plugin process isolation (AppContainer/restricted-token proof of concept for untrusted widget/plugin code). **Status: not started.**
