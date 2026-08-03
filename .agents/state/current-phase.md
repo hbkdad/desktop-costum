@@ -10,7 +10,12 @@ updated: 2026-08-02
 
 **Phase 2 — Product Requirements**: in progress. PRD §1-4 and §13 populated from Phase 1 outputs (`docs/product/prd.md` v0.2). §5-12 deliberately left as outline pending Phase 3 prototype input (locking functional/non-functional requirements before knowing what's technically achievable risks specifying something infeasible).
 
-**Phase 3 — Technical Feasibility Prototypes**: in progress. Prototypes 1 and 2 (plus both follow-up spikes) complete and run against the live desktop — **desktop-hosting strategy finalized and recorded in [ADR-0003](../../docs/architecture/adr/0003-desktop-hosting-strategy.md)**: WorkerW attach (opportunistic, animated) → static wallpaper API (guaranteed, static-only) → overlay window repurposed as a front-layer widget/HUD surface, not wallpaper. `docs/product/prd.md` §4 and §13 updated to reflect that video wallpaper must degrade visibly to static, not silently. Next: Prototype 3 (Explorer restart recovery).
+**Phase 3 — Technical Feasibility Prototypes**: in progress, **all three recommended-first prototypes complete** (2026-08-02), all run against the live desktop, not just documented:
+- Prototype 1 (desktop attachment): unreliable on this build → opportunistic only.
+- Prototype 2 (overlay fallback) + Spikes A/B: z-order overlay structurally impossible behind Progman → discarded for wallpaper, repurposed for widgets; static `SystemParametersInfo` fallback proven reliable.
+- Prototype 3 (Explorer restart recovery): Progman handle confirmed to go stale on restart (~2.7s manual recovery time); found Windows 11 has its own auto-recovery that can race with a manual relaunch — recovery adapter should detect-then-wait-then-relaunch, not kill-then-immediately-relaunch.
+
+Desktop-hosting strategy finalized in [ADR-0003](../../docs/architecture/adr/0003-desktop-hosting-strategy.md). `docs/product/prd.md` §4/§13 updated. Next candidates: prototypes 9-11 (monitor/DPI persistence, fullscreen detection, adaptive rendering) per `backlog/prototype-backlog.md`.
 
 ## Phase 0 exit criteria
 

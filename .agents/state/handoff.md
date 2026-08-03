@@ -4,33 +4,31 @@ updated: 2026-08-02
 
 # Handoff
 
-## What was just done (this session, continued after Phase 0 report)
+## What was just done (this session, continued)
 
-User granted standing authorization to commit and push, and asked to proceed autonomously, prompting only when truly blocked. Since then, pushed 5 commits to `main` on `github.com/hbkdad/desktop-costum`:
+Standing authorization to commit/push and proceed autonomously (granted this session). Pushed 8 commits total to `main` on `github.com/hbkdad/desktop-costum`. Since the last report:
 
-1. Phase 0 scaffold (repo structure, `CLAUDE.md`/`AGENTS.md`, 15 skills, 7 agent prompts, state files, backlog, CI, minimal buildable `.NET` skeleton, sourced 8-product competitor matrix).
-2. Phase 1 close-out: `market-gap-report.md`, `personas.md` (5 personas, 3 MVP-primary), `jobs-to-be-done.md`, `problem-ranking.md`, `pricing-hypotheses.md`, `mvp-positioning.md` — all synthesized from the already-sourced competitor matrix.
-3. PRD v0.2: populated §1-4 and §13 (vision, non-goals, target users, core workflows, MVP acceptance criteria); §5-12 deliberately left outline-only pending Phase 3 input.
-4. **Phase 3 Prototype 1** (desktop attachment / WorkerW): built, ran against the live desktop. **Result: unreliable on this build** — corroborates the Windows 11 24H2 breakage pattern already found in competitor research.
-5. **Phase 3 Prototype 2** (overlay fallback): built, ran against the live desktop. **Result: also insufficient as implemented** — a plain `HWND_BOTTOM` window gets close to but not behind Progman in Z-order.
+7. ADR-0003 (desktop hosting strategy) + Spike A (Progman-handle `SetWindowPos`, same negative result as `HWND_BOTTOM`) + Spike B (`SystemParametersInfo` static fallback, proven reliable, cleanly restores original wallpaper — independently re-verified via registry).
+8. **Phase 3 Prototype 3** (Explorer restart recovery): built and run against the live desktop. Killed and relaunched `explorer.exe`, confirmed Progman's handle goes stale (~2.7s recovery), and found an unexpected race with Windows' own apparent auto-recovery (transient duplicate process/stray window, self-resolved).
 
-**This is the most important thing to know:** neither of the two originally-assumed rendering strategies works yet, on real empirical testing, not just research. The desktop-host module now needs a three-tier fallback plan instead of two. See `.agents/state/decisions.md` (top entry) and both `prototypes/*/REPORT.md` files.
+**All three of the "recommended first three" Phase 3 prototypes are now done**, each backed by real tests against the live desktop, not just documentation. See `backlog/prototype-backlog.md` for the consolidated status and `docs/architecture/adr/0003-desktop-hosting-strategy.md` for the resulting architecture decision.
 
-## Open questions / blocked on owner (unchanged from before, still not blocking technical work)
+## Key findings carried forward
 
-1. Repo visibility and branch protection on `main` — not set.
-2. Codex-compatible skill mirror path — not fabricated, still unconfirmed.
+- Desktop hosting: 3-tier (WorkerW opportunistic → static-wallpaper-API guaranteed → overlay window repurposed for widgets, not wallpaper). Video/animated wallpaper is NOT guaranteed available — PRD §4/§13 already updated to require visible degradation, not silent failure.
+- Explorer restart recovery: handles go stale and must be re-acquired; recovery code should detect-then-wait-then-relaunch to avoid racing Windows' own recovery.
+
+## Open questions / blocked on owner (unchanged, still not blocking)
+
+1. Repo visibility and branch protection on `main`.
+2. Codex-compatible skill mirror path — still unconfirmed, not fabricated.
 3. Product name — still unresolved.
-4. Reddit-corroboration gap in the competitor matrix — flagged, not fixed.
+4. Reddit-corroboration gap in the competitor matrix.
 
 ## Recommended next task
 
-Two follow-up spikes flagged in `prototypes/desktop-overlay-fallback-poc/REPORT.md`, neither built yet:
-1. Retry the overlay using `SetWindowPos(hwnd, progmanHandle, ...)` (real handle, not the `HWND_BOTTOM` pseudo-value) as tier 2 of the fallback chain.
-2. Build the `SystemParametersInfo(SPI_SETDESKWALLPAPER)` static-image path as the guaranteed-available tier 3.
-
-After that: Phase 3 Prototype 3 (Explorer restart recovery), then decide whether to keep going through the remaining 10 prototypes or pause for an ADR locking in the (now three-tier) desktop-hosting architecture given what's been learned.
+Per `backlog/prototype-backlog.md`, next candidates are prototypes 9-11 (monitor/DPI configuration persistence, fullscreen detection, adaptive rendering) — cheap, low-risk, and feed directly into the performance budgets in `backlog/dependency-register.md`. Alternatively, this is also a reasonable point to pause prototyping and populate PRD §5-12 (functional/non-functional requirements) now that Phase 3 has produced real technical constraints to ground them in, rather than continuing to prototype indefinitely.
 
 ## Exact prompt to continue
 
-> Read `.agents/state/current-phase.md` and this handoff. Build the two follow-up spikes flagged in `prototypes/desktop-overlay-fallback-poc/REPORT.md` (Progman-handle `SetWindowPos` variant; `SystemParametersInfo` static fallback tier), test both against the live desktop, then write Phase 3 Prototype 3 (Explorer restart recovery). Update `backlog/prototype-backlog.md`, `backlog/risk-register.md`, and `.agents/state/{current-phase,decisions,handoff}.md` after each. Commit and push after each prototype, per standing authorization.
+> Read `.agents/state/current-phase.md` and this handoff. Either (a) build Phase 3 Prototypes 9-11 (monitor/DPI persistence, fullscreen detection, adaptive rendering) against the live desktop the same way Prototypes 1-3 were done, updating `backlog/prototype-backlog.md` and state files after each; or (b) populate `docs/product/prd.md` §5-12 now that ADR-0003 and the Prototype 1-3 findings give real technical grounding for per-module functional/non-functional requirements. Commit and push after each unit of work, per standing authorization.
