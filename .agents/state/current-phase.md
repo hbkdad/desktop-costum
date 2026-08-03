@@ -42,8 +42,11 @@ The rest are implemented as real, tested code:
 Remaining Phase 4 deliverables: IPC message contracts (shape sketched in ADR-0004, not specified), database design, rendering pipeline.
 
 **Phase 5 — MVP Implementation**: started, unblocked by the isolation validation above.
-- **Slice 1 (workspace foundation)**: `WorkspaceStore` implemented (`src/DesktopRuntime.Core/Workspaces/WorkspaceStore.cs`) — atomic save (temp file → flush-to-disk → atomic move), load, list, delete, import/export. Filenames derive from the workspace **id**, never its user-supplied name. One corrupted file cannot make other workspaces unreachable. Import assigns a new id so it can never silently overwrite. 21 tests.
-- Remaining in Slice 1: workspace *activation* (applying a workspace to the live desktop) — needs the desktop host, which does not exist yet.
+- **Slice 1 (workspace foundation)**: `WorkspaceStore` — atomic save (temp file → flush-to-disk → atomic move), load, list, delete, import/export. Filenames derive from the workspace **id**, never its user-supplied name. One corrupted file cannot make other workspaces unreachable. Import assigns a new id so it can never silently overwrite.
+- **Workspace activation**: `WorkspaceActivator` composes the resolver, tier selection and the wallpaper surface. Best-effort and fully reported — one missing wallpaper file does not abandon the rest, and every degradation produces a warning (PRD §13.7).
+- **First OS adapter**: `src/DesktopRuntime.DesktopHost` (net10.0-windows) implements the hosting abstractions with the P/Invoke validated in Phase 3 — monitor enumeration with stable identity, the attachment probe (undocumented behaviour confined to this one class, never throwing), and the static wallpaper surface which honestly reports `SupportsPerMonitor = false`.
+- **271 tests**: 262 unit + **9 integration tests that exercise the real Windows APIs**, including re-applying the already-set wallpaper to prove the production write path works without changing the desktop.
+- Remaining in Slice 1: applying container/widget layout (needs a UI surface), and activation from the app shell.
 
 ## Phase 0 exit criteria
 

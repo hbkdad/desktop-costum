@@ -1,8 +1,10 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/DesktopRuntime.Core/DesktopRuntime.Core.csproj" />
+    <Project Path="src/DesktopRuntime.DesktopHost/DesktopRuntime.DesktopHost.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/DesktopRuntime.Core.Tests/DesktopRuntime.Core.Tests.csproj" />
+    <Project Path="tests/DesktopRuntime.DesktopHost.Tests/DesktopRuntime.DesktopHost.Tests.csproj" />
   </Folder>
 </Solution>

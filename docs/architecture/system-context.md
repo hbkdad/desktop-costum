@@ -69,10 +69,11 @@ The transition out of `SafeMode` requires *sustained* health, not mere reappeara
 |---|---|
 | Workspace schema, permission model, widget manifest, automation schema, wallpaper tiers, recovery policy, resource accounting, package format | **Implemented and tested** (`src/DesktopRuntime.Core/`) |
 | Process/isolation model | Designed ([ADR-0004](adr/0004-process-and-isolation-model.md)) and **validated by prototype** — caps enforced, processes launch into AppContainers, default-deny denies. Not yet **built** into the product. |
-| App shell, core service, desktop host, wallpaper renderer, widget host | **Not built** — no UI or running processes yet |
+| Desktop host | **Partly built** — `src/DesktopRuntime.DesktopHost` provides monitor enumeration, the attachment probe and the static wallpaper surface, covered by integration tests against the real APIs. No rendering surface yet. |
+| App shell, core service, wallpaper renderer, widget host | **Not built** — no UI or running processes yet |
 | Marketplace | Not started (Phase 8) |
 
-Everything implemented so far is pure policy: no I/O, no clock reads, no OS calls. That is why it is thoroughly testable, and equally why none of it has yet been exercised against a running system. The Phase 3 prototypes in `prototypes/` are the only code that has touched the real desktop, and they are throwaway.
+`DesktopRuntime.Core` remains pure policy — no I/O, no clock reads, no OS calls — which is why it is thoroughly testable. All OS access is confined to `DesktopRuntime.DesktopHost` behind the three interfaces in `Core/Hosting/`, satisfying the "isolate Explorer-specific and undocumented behaviour" rule. Undocumented behaviour is confined further still: to a single class, `WindowsAttachmentProbe`, which only ever *asks a question* and never throws.
 
 ## Reading order
 

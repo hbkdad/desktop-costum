@@ -18,8 +18,11 @@ Product name is unresolved — `Desktop Runtime` is an internal placeholder only
 ## Repository layout
 
 ```
-src/            .NET solution (grows through Phase 5+)
-tests/          automated tests
+src/
+  DesktopRuntime.Core/        domain logic — no I/O, no OS calls, fully unit-tested
+  DesktopRuntime.DesktopHost/ the Windows adapter (all P/Invoke lives here)
+tests/          unit tests plus integration tests against the real Windows APIs
+prototypes/     throwaway Phase 3 feasibility probes, each with a REPORT.md
 docs/           product, research and architecture documentation
 backlog/        task backlog, risk/dependency registers, DoD, prototype backlog
 .agents/        state files and agent role prompts
