@@ -23,6 +23,15 @@ Adopt a three-tier desktop-hosting strategy for the wallpaper host module:
 2. **Tier 2 — Static wallpaper fallback (guaranteed).** `SystemParametersInfo(SPI_SETDESKWALLPAPER)` (single-monitor-spanning) or the `IDesktopWallpaper` COM interface (true per-monitor, not yet tested — follow-up spike) for static/slow-changing content when Tier 1 is unavailable. Proven reliable in this round of testing.
 3. **Not a wallpaper tier — the overlay window investigated in Prototype 2 is repurposed.** Z-order-based "behind icons" placement is conclusively not achievable for a normal top-level window on this build, with either `HWND_BOTTOM` or a real handle. The click-through/non-activating window shape built for that prototype is retained as a building block for a **front-layer** widget/HUD surface (sits above desktop content, never steals focus from real applications) — a different module (widget host), not the wallpaper host.
 
+## Implementation
+
+The tier-selection half of this decision is executable, not just documented: `src/DesktopRuntime.Core/Wallpapers/WallpaperTier.cs` implements the fallback chain and the "degrade visibly, never silently" rule, with tests covering each combination of requested kind and host capability. Two behaviours worth noting:
+
+- Static wallpapers use the static tier **even when attachment is available** — spending a scarce, fragile surface on a still image buys nothing.
+- The decision reports the *requested* kind alongside the *delivered* tier, so a degraded outcome can be surfaced without rewriting what the user asked for (see `workspace-schema.md` decision 4).
+
+Detecting whether an attachment surface actually exists is the desktop host's job and is not yet built; the resolver takes that as an input rather than assuming it.
+
 ## Consequences
 
 - **Video/animated wallpaper is not guaranteed available** on every Windows build/configuration — it depends on Tier 1 succeeding. `docs/product/prd.md` §13 (MVP acceptance criteria) and §2 (non-goals) should reflect this explicitly rather than assuming universal availability; this is a product-scoping consequence, not just a technical footnote.
