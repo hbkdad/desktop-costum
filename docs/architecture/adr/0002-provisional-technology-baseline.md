@@ -14,6 +14,21 @@ Adopt, provisionally: C#, the current supported .NET release, WinUI 3, Windows A
 
 Electron is explicitly excluded unless a future ADR demonstrates in writing that its benefits outweigh its memory, packaging, and native-integration costs versus this baseline.
 
+## Validation status
+
+Parts of this baseline have since been tested rather than assumed:
+
+| Choice | Status |
+|---|---|
+| C# / current .NET | **Validated** — the whole solution builds and 271 tests pass on .NET 10 |
+| Direct Win32 interop for desktop integration | **Validated** — see ADR-0003, ADR-0004 and the Phase 3 prototypes |
+| WinUI 3 / Windows App SDK | **Partly validated, with a prerequisite.** The SDK restores from NuGet with no workload, but compiling XAML **fails without Visual Studio's MSIX/PRI packaging tooling** — `Microsoft.Build.Packaging.Pri.Tasks.dll` ships with VS, not the .NET SDK. Reproduced identically on SDK 1.6 and 1.7, and unaffected by `WindowsPackageType=None` / `EnableMsixTooling=false`. See `prototypes/winui-feasibility-probe/REPORT.md`. |
+| SQLite, WebView2, media/rendering stack, MSIX | Still unvalidated |
+
+**Decision on WinUI 3: keep it.** Requiring VS Build Tools with the Windows App SDK component is normal, documented WinUI practice, and GitHub's `windows-latest` image ships VS Build Tools. Reversing a framework choice on this evidence would be an overreaction. But the prerequisite is now a **hard requirement** recorded in `backlog/dependency-register.md`, and CI must be *verified* to build a WinUI project before the app shell lands rather than assumed to.
+
 ## Consequences
 
-This baseline is unvalidated against real desktop-hosting, rendering, and packaging constraints until the Phase 3 prototypes report back (see `backlog/prototype-backlog.md`). Do not treat any part of this list as locked; Phase 4's architecture lock is the point at which this ADR should be superseded by a decision backed by prototype evidence.
+This baseline is unvalidated against rendering, media and packaging constraints until the remaining Phase 3 prototypes report back (see `backlog/prototype-backlog.md`). Do not treat the unvalidated rows above as locked.
+
+One consequence has already proved its worth: because `DesktopRuntime.Core` carries no UI dependency, the WinUI toolchain gap blocks only the UI. The domain layer, the Windows adapter and every test build without it.

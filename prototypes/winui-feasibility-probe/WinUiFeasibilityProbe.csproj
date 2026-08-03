@@ -1,0 +1,33 @@
+<!--
+  Phase 3 probe: is the WinUI 3 / Windows App SDK toolchain from ADR-0002 actually
+  usable here?
+
+  Restoring the SDK and building a library with UseWinUI proved only that the package
+  and targets load. The real questions are whether XAML compiles and whether a window
+  launches, so this is a genuine unpackaged WinUI application.
+
+  Unpackaged (WindowsPackageType=None) and self-contained, so it needs no MSIX identity
+  and no machine-wide Windows App SDK runtime install.
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <EnableMsixTooling>false</EnableMsixTooling>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.*" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.*" />
+  </ItemGroup>
+
+</Project>

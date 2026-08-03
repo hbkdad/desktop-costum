@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/DesktopRuntime.Cli/DesktopRuntime.Cli.csproj" />
     <Project Path="src/DesktopRuntime.Core/DesktopRuntime.Core.csproj" />
     <Project Path="src/DesktopRuntime.DesktopHost/DesktopRuntime.DesktopHost.csproj" />
   </Folder>

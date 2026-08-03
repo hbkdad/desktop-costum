@@ -3,7 +3,7 @@
 | Dependency | Purpose | Status | Risk note |
 |---|---|---|---|
 | .NET SDK (10.0.204 installed locally, this session) | Build/runtime | Available locally | Confirm the CI runner image matches; pin an explicit SDK version once the real product TFM is chosen (Phase 3/4) rather than floating on "latest" |
-| WinUI 3 / Windows App SDK | UI framework | Not yet installed/validated | Requires the Windows App SDK workload; validate install and packaging story in a Phase 3 prototype before relying on it |
+| WinUI 3 / Windows App SDK | UI framework | **Partly validated — blocked on this machine.** NuGet restore works with no workload, but XAML compilation fails without VS packaging tooling. See `prototypes/winui-feasibility-probe/REPORT.md`. | **HARD PREREQUISITE: Visual Studio Build Tools with the Windows App SDK / MSIX packaging component.** Not optional, and not supplied by the .NET SDK. No Visual Studio is installed on the current development machine, so the UI layer cannot be built here until it is. CI must be *verified* to have it before the app shell lands. |
 | Windows Community Toolkit | UI/behaviors helpers | Not yet validated | Low risk, well-maintained |
 | SQLite | Local storage | Not yet integrated | Low risk |
 | WebView2 | Web wallpapers, plugin web content | Not yet integrated | Runtime must be present on target machines (evergreen, usually preinstalled on Win11) — confirm and document fallback if absent |

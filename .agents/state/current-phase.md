@@ -46,7 +46,10 @@ Remaining Phase 4 deliverables: IPC message contracts (shape sketched in ADR-000
 - **Workspace activation**: `WorkspaceActivator` composes the resolver, tier selection and the wallpaper surface. Best-effort and fully reported — one missing wallpaper file does not abandon the rest, and every degradation produces a warning (PRD §13.7).
 - **First OS adapter**: `src/DesktopRuntime.DesktopHost` (net10.0-windows) implements the hosting abstractions with the P/Invoke validated in Phase 3 — monitor enumeration with stable identity, the attachment probe (undocumented behaviour confined to this one class, never throwing), and the static wallpaper surface which honestly reports `SupportsPerMonitor = false`.
 - **271 tests**: 262 unit + **9 integration tests that exercise the real Windows APIs**, including re-applying the already-set wallpaper to prove the production write path works without changing the desktop.
-- Remaining in Slice 1: applying container/widget layout (needs a UI surface), and activation from the app shell.
+- **Interim CLI shell** (`src/DesktopRuntime.Cli`, `desktopruntime`): `monitors`, `list`, `new`, `set-wallpaper`, `activate`, `delete`, `where`. **The first runnable artifact.** Verified end to end on the real desktop: requested a *video* wallpaper → ADR-0003 tier selection found attachment unavailable → degraded to a still image → applied through the real Windows API → the degradation surfaced as a visible warning, exactly as PRD §13.7 requires.
+- Remaining in Slice 1: applying container/widget layout (needs a UI surface), and the real app shell.
+
+**Blocked on tooling, not design:** the WinUI 3 app shell cannot be built on this machine — XAML compilation needs Visual Studio's MSIX/PRI tooling, which the .NET SDK does not ship and no Visual Studio is installed. See `prototypes/winui-feasibility-probe/REPORT.md`; ADR-0002 and the dependency/risk registers are updated. Notably this blocks *only* the UI: `Core`, the Windows adapter, the CLI and all 271 tests build without it — which is what keeping the domain layer UI-free was for.
 
 ## Phase 0 exit criteria
 
