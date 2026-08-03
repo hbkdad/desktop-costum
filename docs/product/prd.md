@@ -36,7 +36,7 @@ Deferred past MVP: Aesthetic Tinkerer (creator/marketplace user), IT-Managed / s
 
 1. **Create and activate a workspace** — a named collection of container layout, widget placement, and wallpaper assignment that can be saved, loaded, and switched.
 2. **Organize desktop icons into containers** — create/move/resize/rename/collapse a container; folder-portal a folder's live contents onto the desktop without opening Explorer.
-3. **Set a wallpaper (static or video) per monitor** — with an enforced, reported resource budget and automatic quality/frame-rate reduction on battery power (Job #3 in `docs/product/jobs-to-be-done.md`).
+3. **Set a wallpaper (static or video) per monitor** — with an enforced, reported resource budget and automatic quality/frame-rate reduction on battery power (Job #3 in `docs/product/jobs-to-be-done.md`). **Per ADR-0003:** video/animated wallpaper depends on Tier 1 (WorkerW attachment) succeeding, which is opportunistic, not guaranteed — the workflow must degrade to the static-image fallback (Tier 2, proven reliable) automatically and visibly when Tier 1 is unavailable, not fail silently.
 4. **Add a basic widget** (clock, CPU/memory/storage monitor, notes, app launcher, recent files) to the desktop.
 5. **Recover automatically from Explorer restart or a Windows update-related shell disruption** without the user having to manually rebuild their layout (Job #2 and #6).
 6. **Reconnect a monitor or dock/undock a laptop** and have containers, widgets, and per-monitor wallpapers reappear correctly (Job #1).
@@ -83,3 +83,4 @@ Derived from `docs/product/mvp-positioning.md`. The MVP is not done until:
 4. Every wallpaper and widget feature reports a real, measured resource-impact number (`performance-test` skill) for idle, active, and fullscreen-paused states — no feature ships with an unmeasured performance claim.
 5. Multi-monitor / DPI-change / dock-undock is tested and passes on at least a 2-monitor mixed-DPI configuration (Multi-Monitor Power User persona is the acceptance bar).
 6. No MVP feature depends solely on an undocumented Windows behavior without a working, tested fallback (non-negotiable #3/#5).
+7. Video/animated wallpaper explicitly degrades to the static-image fallback (ADR-0003, Tier 2) when WorkerW attachment (Tier 1) is unavailable, with the degraded state visible to the user rather than silently different from what they configured.

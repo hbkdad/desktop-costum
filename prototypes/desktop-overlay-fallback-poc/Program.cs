@@ -60,9 +60,20 @@ static class Program
         var bounds = Screen.PrimaryScreen?.Bounds ?? new Rectangle(0, 0, 1920, 1080);
 
         var form = new OverlayForm(bounds);
-        form.Shown += (_, _) => ReportZOrder("immediately after show + SetWindowPos(HWND_BOTTOM)", form.Handle);
+        form.Shown += (_, _) => ReportZOrder("immediately after show + SetWindowPos(Progman handle)", form.Handle);
 
-        // Auto-close after 4 seconds — this is a probe, not a persistent app.
+        // Re-assert position once more after 1.5s (real wallpaper apps periodically
+        // re-assert bottom position since other windows/Explorer can re-order things),
+        // then report again, then auto-close after 4s. This is a probe, not a persistent app.
+        var reassertTimer = new System.Windows.Forms.Timer { Interval = 1500 };
+        reassertTimer.Tick += (_, _) =>
+        {
+            reassertTimer.Stop();
+            form.RepositionBehindProgman();
+            ReportZOrder("1.5s later, after re-asserting position", form.Handle);
+        };
+        reassertTimer.Start();
+
         var timer = new System.Windows.Forms.Timer { Interval = 4000 };
         timer.Tick += (_, _) =>
         {
@@ -156,7 +167,17 @@ class OverlayForm : Form
     protected override void OnShown(EventArgs e)
     {
         base.OnShown(e);
-        NativeMethods.SetWindowPos(Handle, NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
+        RepositionBehindProgman();
+    }
+
+    public void RepositionBehindProgman()
+    {
+        // Spike A: use Progman's real handle as hWndInsertAfter instead of the
+        // HWND_BOTTOM pseudo-value (Prototype 2's first pass) — SetWindowPos's
+        // hWndInsertAfter places this window immediately behind the given handle.
+        IntPtr progman = NativeMethods.FindWindow("Progman", null);
+        IntPtr insertAfter = progman != IntPtr.Zero ? progman : NativeMethods.HWND_BOTTOM;
+        NativeMethods.SetWindowPos(Handle, insertAfter, 0, 0, 0, 0,
             NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOACTIVATE);
     }
 }
