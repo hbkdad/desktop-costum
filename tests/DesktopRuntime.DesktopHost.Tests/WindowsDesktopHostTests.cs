@@ -92,20 +92,23 @@ public class WindowsDesktopHostTests
     }
 
     [Fact]
-    public void WallpaperSurface_DoesNotClaimPerMonitorSupport()
+    public void WallpaperSurface_ReportsPerMonitorSupportHonestly()
     {
-        // SystemParametersInfo sets one image for the whole desktop. Claiming otherwise
-        // would make WorkspaceActivator skip the warning users need.
-        Assert.False(new WindowsWallpaperSurface().SupportsPerMonitor);
+        // The claim must match reality in both directions: claiming support without being
+        // able to enumerate targets would make WorkspaceActivator skip a warning users
+        // need, and denying it while the shell interface works would produce a spurious one.
+        using var surface = new WindowsWallpaperSurface();
+
+        Assert.Equal(surface.SupportsPerMonitor, surface.GetShellMonitorIds().Count > 0);
     }
 
     [Fact]
     public void WallpaperSurface_RejectsAMissingFile_WithoutChangingAnything()
     {
-        var surface = new WindowsWallpaperSurface();
+        using var surface = new WindowsWallpaperSurface();
         string? before = surface.GetCurrentWallpaper();
 
-        string? error = surface.SetStaticWallpaper("ignored", @"C:\definitely\not\here\nope.jpg");
+        string? error = surface.SetStaticWallpaper("", @"C:\definitely\not\here\nope.jpg");
 
         Assert.NotNull(error);
         Assert.Contains("does not exist", error);
@@ -115,7 +118,9 @@ public class WindowsDesktopHostTests
     [Fact]
     public void WallpaperSurface_RejectsAnEmptyPath()
     {
-        Assert.NotNull(new WindowsWallpaperSurface().SetStaticWallpaper("ignored", "   "));
+        using var surface = new WindowsWallpaperSurface();
+
+        Assert.NotNull(surface.SetStaticWallpaper("", "   "));
     }
 
     [Fact]
@@ -123,7 +128,7 @@ public class WindowsDesktopHostTests
     {
         // Exercises the full production path against the real API while leaving the
         // desktop visually unchanged, because the image applied is the current one.
-        var surface = new WindowsWallpaperSurface();
+        using var surface = new WindowsWallpaperSurface();
         string? current = surface.GetCurrentWallpaper();
 
         if (string.IsNullOrWhiteSpace(current) || !File.Exists(current))
@@ -131,7 +136,14 @@ public class WindowsDesktopHostTests
             return; // No wallpaper set (common on build agents) — nothing to re-apply.
         }
 
-        string? error = surface.SetStaticWallpaper("ignored", current);
+        if (WindowsWallpaperSurface.IsTranscodedCache(current))
+        {
+            // Re-applying Windows' own cache would install an internal file as the user's
+            // chosen wallpaper. Visually identical, but it discards the original path.
+            return;
+        }
+
+        string? error = surface.SetStaticWallpaper("", current);
 
         Assert.Null(error);
         Assert.Equal(current, surface.GetCurrentWallpaper());
