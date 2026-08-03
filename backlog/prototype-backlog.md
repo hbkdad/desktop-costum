@@ -4,16 +4,16 @@ Each prototype must report: purpose, implementation, test method, measurements, 
 
 ## Recommended first three
 
-1. **Desktop attachment** (WorkerW/Progman-style hosting) — the highest-risk, most load-bearing unknown; every competitor researched has documented breakage here, and every other wallpaper/widget/container feature depends on this working (or on knowing definitively that it doesn't and the overlay fallback is primary).
-2. **Desktop overlay fallback mode** — required in parallel with #1, not after it, because the non-negotiable principles mandate a fallback independent of undocumented shell behaviour; also de-risks the case where #1 turns out to be too fragile to be the primary path.
-3. **Explorer restart recovery** — the second most common cross-competitor failure mode (crash/restart loops), and directly coupled to whichever hosting approach #1/#2 land on; needs to be proven before any persistent desktop state (containers, workspace layout) can be trusted.
+1. **Desktop attachment** (WorkerW/Progman-style hosting) — **DONE (2026-08-02), result: unreliable on current build.** See `prototypes/desktop-attachment-poc/REPORT.md`. On Windows build 10.0.26200.0, the classic message+sibling-lookup technique did not locate a usable WorkerW window (15 pre-existing WorkerW windows were found, none where the technique expects; Progman enumerates bottommost, so nothing to find "after" it without the message provably inserting a new one). This corroborates the Windows 11 24H2 breakage pattern already documented across Wallpaper Engine/Lively/Fences/DeskScapes/Start11 in `docs/research/competitor-matrix.md`. **Decision: keep as an opportunistic enhancement, not the primary path.**
+2. **Desktop overlay fallback mode** — **promoted to co-primary** as a direct consequence of #1's result (not merely "required in parallel" as originally scoped — it's now the default rendering path candidate).
+3. **Explorer restart recovery** — still next; directly coupled to whichever hosting approach #1/#2 land on, needs to be proven before any persistent desktop state (containers, workspace layout) can be trusted.
 
 Rationale: these three de-risk the single biggest architectural unknown — whether reliable desktop/shell integration is achievable at all on supported terms — before investing in wallpapers, widgets, or automation built on top of it.
 
 ## Full backlog
 
-1. Desktop attachment — see above.
-2. Desktop overlay fallback — see above.
+1. Desktop attachment — see above. **Status: done, see report.**
+2. Desktop overlay fallback — see above. **Status: in progress, next.**
 3. Explorer restart recovery — see above.
 4. Per-monitor wallpaper hosting.
 5. Video wallpaper playback.
