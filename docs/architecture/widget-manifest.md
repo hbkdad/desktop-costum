@@ -50,7 +50,7 @@ Each is covered by a test in `tests/DesktopRuntime.Core.Tests/Widgets/`:
 
 ## Declared vs actual cost
 
-The budget in a manifest is the author's **claim**. Nothing here verifies it. Measuring real cost and rejecting or flagging widgets that exceed their declared budget is runtime/marketplace work (Phase 6–8) and is not yet built — see the `performance-test` skill and `backlog/risk-register.md`.
+The budget in a manifest is the author's **claim**; nothing in *this* document verifies it. Checking claims against measured use is `docs/architecture/resource-accounting.md`, which compares samples to the declared budget and reports sustained breaches. What to *do* about an offender — throttle, pause, warn, or reflect it in a marketplace listing — is still open (Phase 6–8).
 
 ## Not yet specified
 
