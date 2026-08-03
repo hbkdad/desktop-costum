@@ -54,12 +54,28 @@ DesktopRuntime.DesktopHost  the Windows adapter — ALL P/Invoke lives here
 4. Product name — unresolved.
 5. Pricing hypotheses unvalidated with users; Reddit-corroboration gap in the competitor matrix.
 
+## There is now something runnable
+
+```bash
+dotnet run --project src/DesktopRuntime.Cli -- monitors
+```
+
+`src/DesktopRuntime.Cli` (`desktopruntime`) is the interim shell: `monitors`, `list`, `new`, `set-wallpaper`, `activate`, `delete`, `where`. Verified end to end on the real desktop — a *video* wallpaper request degraded to a still image and said so, exactly as PRD §13.7 requires.
+
+## The UI is blocked on tooling, not design
+
+WinUI 3 XAML will not compile here: it needs Visual Studio's MSIX/PRI tooling, which the .NET SDK does not ship, and no Visual Studio is installed. Reproduced on SDK 1.6 and 1.7. **Decision: keep WinUI 3** — the prerequisite is normal documented practice — but it is now a hard requirement in the dependency register and an owner action in the risk register. See `prototypes/winui-feasibility-probe/REPORT.md`.
+
+This blocks *only* the UI. `Core`, the Windows adapter, the CLI and all 271 tests build without it.
+
 ## Recommended next task
 
-**Build the app shell** — a minimal WinUI 3 window that lists workspaces from `WorkspaceStore` and activates one via `WorkspaceActivator`, surfacing its warnings. That is the first thing a person can actually *use*, it exercises the whole stack end to end, and it forces the WinUI 3 / Windows App SDK choice in ADR-0002 to finally be validated rather than assumed — the last major unvalidated technology bet.
+Whichever of these fits the owner's situation:
 
-Alternatives, lower value right now: remaining Phase 4 paperwork (IPC contracts, database design, rendering pipeline), or `IDesktopWallpaper` COM for true per-monitor wallpaper.
+1. **If VS Build Tools get installed** — build the WinUI app shell over `WorkspaceStore` + `WorkspaceActivator`, and *verify* CI builds it rather than assuming.
+2. **Otherwise, keep extending the runtime through the CLI** — Slice 2 (desktop containers) is the natural next feature, and container layout can be modelled and tested without a UI even though rendering needs one.
+3. **Lower value right now:** remaining Phase 4 paperwork (IPC contracts, database design, rendering pipeline), or `IDesktopWallpaper` COM for true per-monitor wallpaper — which would let `SupportsPerMonitor` become true and remove a real limitation users would notice.
 
 ## Exact prompt to continue
 
-> Read `.agents/state/current-phase.md` and this handoff. Create a minimal WinUI 3 app shell that lists workspaces from `WorkspaceStore`, activates the selected one through `WorkspaceActivator`, and displays the returned warnings. This also validates the WinUI 3 / Windows App SDK assumption in ADR-0002 — if it proves impractical, record that in an ADR rather than working around it silently. Then update state files, run `dotnet test`, and commit/push per standing authorization.
+> Read `.agents/state/current-phase.md` and this handoff. If Visual Studio Build Tools with the Windows App SDK component are now installed, build the WinUI 3 app shell over `WorkspaceStore`/`WorkspaceActivator` and verify CI can build it. If not, continue through the CLI instead — implement `IDesktopWallpaper` COM in `DesktopRuntime.DesktopHost` so `SupportsPerMonitor` can become true, with integration tests that leave the user's wallpaper unchanged. Update state files, run `dotnet test`, and commit/push per standing authorization.
