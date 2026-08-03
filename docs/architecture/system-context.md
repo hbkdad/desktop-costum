@@ -68,7 +68,7 @@ The transition out of `SafeMode` requires *sustained* health, not mere reappeara
 | Area | Status |
 |---|---|
 | Workspace schema, permission model, widget manifest, automation schema, wallpaper tiers, recovery policy, resource accounting, package format | **Implemented and tested** (`src/DesktopRuntime.Core/`) |
-| Process/isolation model | Designed ([ADR-0004](adr/0004-process-and-isolation-model.md)), **not built or validated** |
+| Process/isolation model | Designed ([ADR-0004](adr/0004-process-and-isolation-model.md)) and **validated by prototype** — caps enforced, processes launch into AppContainers, default-deny denies. Not yet **built** into the product. |
 | App shell, core service, desktop host, wallpaper renderer, widget host | **Not built** — no UI or running processes yet |
 | Marketplace | Not started (Phase 8) |
 

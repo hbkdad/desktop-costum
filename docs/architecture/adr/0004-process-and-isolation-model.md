@@ -2,13 +2,16 @@
 
 ## Status
 
-**Accepted in part.** Phase 3 Prototype 13 (`prototypes/process-isolation-poc/REPORT.md`) has since validated the enforcement half on real hardware, unelevated:
+**Accepted.** Validated on real hardware, unelevated, across two prototypes:
 
-- Job object memory caps are genuinely **enforced** — a 512 MB allocation was refused under a 146 MB cap.
-- Per-job accounting is readable from the trusted side and costs **~0.17 ms** per query, making it a viable sample source for `ResourceLedger`.
-- An AppContainer profile can be created without elevation.
+| Claim | Evidence |
+|---|---|
+| Job memory caps are genuinely **enforced** | A 512 MB allocation was refused under a 146 MB cap (`prototypes/process-isolation-poc/`) |
+| Per-job accounting is readable from the trusted side | ~**0.17 ms** per query — a viable `ResourceLedger` sample source, observed *about* the sandbox rather than self-reported *by* it |
+| A process can be **launched into** an AppContainer | Control process ran inside a container and returned its exit code (`prototypes/appcontainer-launch-poc/`) |
+| Default-deny actually **denies** | A file readable outside the container was refused inside it, with zero capabilities granted — a differential test |
 
-**Still unverified — do not treat as settled:** launching a process *into* an AppContainer (creating the profile is the easy half), restricted tokens, and CPU capping (only memory was tested; CPU rate control has different semantics and can terminate rather than throttle, which would be wrong for a widget).
+**Still to be exercised (engineering, not open research):** restricted tokens; granting the container SID read+execute on our own install directory (required for our binary, unlike the `cmd.exe` used in the probe); positive tests that *granted* capabilities work, not only that ungranted ones are denied; and CPU capping — only memory was tested, and CPU rate control has different semantics that can terminate rather than throttle, which would be wrong for a widget.
 
 ## Context
 
@@ -60,4 +63,4 @@ Named pipes with an explicit message contract per direction, and per-connection 
 - **A widget cannot exceed its declared budget**, rather than merely being reported for it — but only once job-object limits are wired up, which is not done.
 - **Process count grows with installed packages.** Idle cost must be measured against the benchmark profiles as package count rises; this is a real risk to the idle-cost budget and belongs in the performance work.
 - **IPC latency enters the widget update path.** Widgets are event-driven and low-frequency by design, so this should be acceptable — but it is an assumption, not a measurement.
-- **A narrowed blocker remains for Phase 5.** Prototype 13 confirmed the job-object enforcement this design leans on, so the open question is now specifically *"can a real renderer run inside an AppContainer with a restricted token?"* rather than the whole isolation model. If it cannot, the fallback is a restricted-token process without an AppContainer — weaker, and needing its own ADR.
+- **The Phase 5 blocker is cleared.** Prototypes 13 and 13b together validate the load-bearing basis of this model: caps are enforced, accounting is cheap and trustworthy, processes launch into containers, and default-deny denies. What remains is engineering with known shapes rather than open research, so Phase 5 can proceed on validated ground.
